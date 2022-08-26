@@ -125,6 +125,17 @@ elif [ "${1}" = "cicd" ]
 then
   shift
   doDevonCommand cicdgen java "${*}"
+elif [ "${1}" = "version" ]
+then
+  if [ "${2}" = "list" ] || [ "${2}" = "" ]
+  then
+    doListSoftwareVersions $(basename "${0}")
+  elif [ "${2}" = "set" ]
+  then
+    doSetSoftwareVersion $(basename "${0}") "${3}"
+  else
+    doFail "Unknown argument ${2}"
+  fi
 else
   doFail "Unknown argument ${1}"
 fi
