@@ -16,20 +16,47 @@ source "${DEVON_IDE_HOME}/scripts/environment-project" export
 DEVON_DOWNLOAD_DIR="${DEVON_HOME_DIR}/Downloads/devonfw-ide"
 
 # $1: software
+# $2: provider ( in case there are many as for java )
 function doListSoftwareVersions() {
   local mirrors_path="${DEVON_IDE_HOME}/mirrors/${1}"
 
-  if [ ! -f "${mirrors_path}/available_versions" ]
-  then
-    echo > "${mirrors_path}/available_versions"
+  if [ -z "${2}" ]
+    then
+      if [ -f "${mirrors_path}/available_versions" ]
+      then
+        doEcho "Getting available versions..."
+        cat "${mirrors_path}/available_versions"
+      else
+        doEcho "Getting available versions..."
+        versions_url=$(cat "${mirrors_path}/versions-url")
+        versions_url_op=$(cat "${mirrors_path}/versions-url-op")
+        if [ "${versions_url_op}" == "github" ]
+        then
+          curl "${versions_url}" | awk -F "\"" '/tag_name/ {print $4}' | sort -V -r > "${mirrors_path}/available_versions"
+        else 
+          eval "curl "${versions_url}" | "${versions_url_op}"" > "${mirrors_path}/available_versions"
+        fi
+        cat "${mirrors_path}/available_versions"
+      fi
+  else
+    if [ -f "${mirrors_path}/${2}/available_versions" ]
+    then
+      doEcho "Getting available versions..."
+      cat "${mirrors_path}/${2}/available_versions"
+    else
+      doEcho "Getting available versions..."
+      versions_url=$(cat "${mirrors_path}/${2}/versions-url")
+      versions_url_op=$(cat "${mirrors_path}/${2}/versions-url-op")
+      if [ "${versions_url_op}" == "github" ]
+      then
+        curl "${versions_url}" | awk -F "\"" '/tag_name/ {print $4}' | sort -V -r > "${mirrors_path}/${2}/available_versions"
+      else 
+        eval "curl "${versions_url}" | "${versions_url_op}"" > "${mirrors_path}/${2}/available_versions"
+      fi
+      cat "${mirrors_path}/${2}/available_versions"
+    fi
   fi
 
-  # TODO: get versions properly
-  doEcho "Getting available versions..."
-  curl -s https://api.github.com/repos/adoptium/temurin11-binaries/releases | awk -F "\"" '/tag_name/ {print $4}' > "${mirrors_path}/available_versions"
-  # major version
-
-  cat "${mirrors_path}/available_versions"
 }
 
 # $1: software
