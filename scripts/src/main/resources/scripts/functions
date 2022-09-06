@@ -15,6 +15,11 @@ fi
 source "${DEVON_IDE_HOME}/scripts/environment-project" export
 DEVON_DOWNLOAD_DIR="${DEVON_HOME_DIR}/Downloads/devonfw-ide"
 
+function test() {
+  echo "Home: ${DEVON_IDE_HOME}"
+  echo "Workspace path: ${WORKSPACE_PATH}"
+}
+
 # $1: software
 # $2: provider ( in case there are many as for java )
 function doListSoftwareVersions() {
