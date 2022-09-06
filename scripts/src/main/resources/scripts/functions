@@ -15,7 +15,7 @@ fi
 source "${DEVON_IDE_HOME}/scripts/environment-project" export
 DEVON_DOWNLOAD_DIR="${DEVON_HOME_DIR}/Downloads/devonfw-ide"
 
-function test() {
+function doTest() {
   echo "Home: ${DEVON_IDE_HOME}"
   echo "Workspace path: ${WORKSPACE_PATH}"
 }
