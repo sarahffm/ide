@@ -23,7 +23,7 @@ function doTest() {
 # $1: software
 # $2: provider ( in case there are many as for java )
 function doListSoftwareVersions() {
-  local mirrors_path="${DEVON_IDE_HOME}/mirrors/${1}"
+  local mirrors_path="${DEVON_IDE_HOME}/${1}"
 
   if [ -z "${2}" ]
     then
